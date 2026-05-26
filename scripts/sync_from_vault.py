@@ -21,6 +21,9 @@ HUB_COPIES = [
     (VAULT_LIB / "张一鸣_飞书" / "README.md", ZYM_FEISHU / "README.md"),
 ]
 
+# Curated in-repo; vault copy has Obsidian-only wikilinks at top
+READING_LIST_OUT = ZYM_OUT / "张一鸣推荐书单.md"
+
 
 def copy_glob(pattern: str, dest: Path) -> list[Path]:
     dest.mkdir(parents=True, exist_ok=True)
@@ -57,10 +60,13 @@ def main() -> None:
             dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src, dst)
 
+    extra = 1 if READING_LIST_OUT.is_file() else 0
     print(f"paul-graham: {len(pg)} articles")
     print(f"sam-altman: {len(sam)} articles")
-    print(f"zhang-yiming: {len(zym)} articles + {len(feishu)} feishu")
-    print(f"total markdown: {len(pg) + len(sam) + len(zym) + len(feishu) + sum(1 for s, _ in HUB_COPIES if s.is_file())}")
+    print(f"zhang-yiming: {len(zym)} articles + {len(feishu)} feishu + {extra} reading-list")
+    print(
+        f"total markdown: {len(pg) + len(sam) + len(zym) + len(feishu) + extra + sum(1 for s, _ in HUB_COPIES if s.is_file())}"
+    )
 
 
 if __name__ == "__main__":
